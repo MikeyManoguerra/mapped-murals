@@ -1,0 +1,171 @@
+# loaded via angular.json file
+
+
+# LOCAL BACKEND CONFIG USED FOR DEVELOPMENT VV
+# local_backend: true
+  # use for browser cache issue => localStorage.removeItem("netlifySiteURL");
+backend:
+
+  name: git-gateway
+  # name: github
+
+  repo: mikeymanoguerra/mapped-murals
+  branch: main
+
+media_folder: src/assets/uploads
+public_folder: assets/uploads
+
+collections:
+  - label: Page level information
+    name: global
+    files:
+      - name: home
+        label: Home Page
+        file: content/global/home.md
+        identifier_field: heading
+        fields:
+          - label: Hero Heading
+            name: heading
+            widget: string
+          - label: Hero Kicker
+            name: kicker
+            widget: string
+          - label: Hero Image
+            name: src
+            widget: image
+            required: false
+          - label: Hero Image Alt Text
+            name: alt
+            widget: string
+          - label: Content
+            name: body
+            minimal: true
+            widget: markdown
+            required: false
+
+      - label: About Page
+        name: about
+        identifier_field: heading
+        file: "content/globals/about.md"
+        fields:
+          - label: Heading
+            name: heading
+            widget: string
+          - label: Kicker
+            name: kicker
+            widget: string
+          - label: Image
+            name: src
+            widget: image
+            required: false
+          - label: Image Alt Text
+            name: alt
+            widget: string
+          - label: Content
+            name: body
+            minimal: true
+            widget: markdown
+            required: false
+
+# content configs
+  - name: "mural"
+    label: "Mural"
+    extention: md
+    folder: "content/murals"
+    create: true
+    identifier_field: title
+    fields:
+      - label: Mural Title
+        name: title
+        widget: string
+      - label: ID
+        name: id
+        widget: hidden
+      - label: Attribution
+        name: attribution
+        widget: string
+      - label: Location
+        name: location
+        widget: map
+        default: '{"type":"Point","coordinates":[-75.1640227,39.9523726]}'
+      - label: Image
+        name: src
+        widget: image
+        required: false
+      - label: Image Alt Text
+        name: alt
+        widget: string
+      - label: "Nearby Trees"
+        name: "nearbyTrees"
+        widget: list
+        add_to_top: true
+        summary: '{{fields.species.name}} - {{fields.alt}}'
+        fields:
+          - label: Tree Species
+            name: speciesId
+            widget: relation
+            collection: species
+            search_fields: [name, genus, species]
+            value_field: id
+            display_fields: [genus, species, name]
+          - label: Image
+            name: src
+            widget: image
+            required: false
+          - label: Image Alt Text
+            name: alt
+            widget: string
+            required: false
+          - label: Location
+            name: location
+            widget: map
+            default: '{"type":"Point","coordinates":[-75.1640227,39.9523726]}'
+      - label: Publish Date
+        name: date
+        widget: date
+      - label: Content
+        name: body
+        minimal: true
+        widget: markdown
+        required: false
+
+  - name: species
+    label: Species
+    extention: md
+    folder: content/species
+    create: true
+    slug: "{{genus}}-{{species}}"
+    identifier_field: name
+    fields:
+      - label: Common Name
+        name: name
+        widget: string
+      - label: ID
+        name: id
+        widget: hidden
+      - label: Species
+        name: species
+        widget: string
+      - label: Genus
+        name: genus
+        widget: string
+      - label: Family
+        name: family
+        widget: string
+      - label: Content
+        name: body
+        minimal: true
+        widget: markdown
+        required: false
+      - label: "Gallery"
+        name: "galleryImages"
+        widget: list
+        add_to_top: true
+        max: 5
+        fields:
+          - label: Image
+            name: src
+            widget: image
+          - label: Image Alt Text
+            name: alt
+            widget: string
